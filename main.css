@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+
+namespace MasterMind
+{
+    class MainClass {
+        public static void Main (string[] args) {
+            const int MAX_CODE = 4;
+            const int MIN_NUM = 1;
+            const int MAX_NUM = 6;
+            const int MAX_LIVES = 4;
+            int lives = 0;
+            bool done = false;
+            string secret_code = GetCode(MAX_CODE, MIN_NUM, MAX_NUM);
+            while (!done) {
+               
+                Console.WriteLine("[{0}]", string.Join(", ", secret_code));
+                Console.Write("Enter your guess {0} digits from {1} to {2}: ", MAX_CODE, MIN_NUM, MAX_NUM);
+                string player_guess = Console.ReadLine();
+                if (player_guess.Length < MAX_CODE) {
+                    Console.WriteLine("Guess too short! ");
+                }
+                int correct_num = 0;
+                int correct_pos = 0;
+                for (int i = 0; i < MAX_CODE; i++) {
+                    if (secret_code.IndexOf(player_guess[i]) > -1) {
+                        correct_num += 1;
+                    } else {
+                        Console.WriteLine("{0} not in {1}", player_guess[i], secret_code);
+                    }
+                    if (player_guess[i] == secret_code[i]) {
+                        correct_pos += 1;
+                    } 
+                }
+                if (correct_pos == MAX_CODE) {
+                    Console.WriteLine("Well done, you have won!");
+                    done = true;
+                } else {
+                    Console.WriteLine("{0} numbers correct. {1} in the right location!", correct_num, correct_pos);
+                    lives += 1;
+                    Console.WriteLine("{0} lives left!", (MAX_LIVES - lives));
+                }
+                
+            }
+        }
+        static string GetCode(int max_list, int min_num, int max_num)
+		{
+			string secret_code = "";
+			Random random = new Random();
+			while (secret_code.Length < max_list) {
+			    string num = Convert.ToString(random.Next(min_num, max_num));
+			    if (secret_code.IndexOf(num) == -1) {
+			        secret_code += num;
+			    }
+			}
+			return secret_code;
+		}
+    }
+}
